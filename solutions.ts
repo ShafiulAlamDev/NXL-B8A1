@@ -162,6 +162,7 @@ const getPopularCourses = (
   );
 };
 
+/** 
 const courses: Course[] = [
   {
     title: "TypeScript",
@@ -188,3 +189,30 @@ const courses: Course[] = [
 const result = getPopularCourses(courses, 100);
 
 console.log(result);
+**/
+
+const pluckValues = <T, K extends keyof T>(
+  items: T[],
+  key: K
+): T[K][] => {
+  return items.map((item) => item[key]);
+};
+
+// Sample input
+/** 
+const users = [
+  { id: 1, name: "Rakib", role: "Admin" },
+  { id: 2, name: "Sadia", role: "Editor" },
+  { id: 3, name: "Tariq", role: "Subscriber" }
+];
+const names = pluckValues(users, "name");
+const ids = pluckValues(users, "id");
+const roles = pluckValues(users, "role");
+console.log(names);
+**/
+
+// ["Rakib", "Sadia", "Tariq"]
+//console.log(ids);
+// [1, 2, 3]
+//console.log(roles);
+// ["Admin", "Editor", "Subscriber"]

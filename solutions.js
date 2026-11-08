@@ -96,28 +96,50 @@ const getPopularCourses = (courses, minStudents) => {
     return courses.filter((course) => course.isPublished === true &&
         course.students >= minStudents);
 };
-const courses = [
-    {
-        title: "TypeScript",
-        students: 150,
-        isPublished: true,
-    },
-    {
-        title: "React",
-        students: 80,
-        isPublished: true,
-    },
-    {
-        title: "Laravel",
-        students: 200,
-        isPublished: false,
-    },
-    {
-        title: "Node.js",
-        students: 120,
-        isPublished: true,
-    },
+/**
+const courses: Course[] = [
+  {
+    title: "TypeScript",
+    students: 150,
+    isPublished: true,
+  },
+  {
+    title: "React",
+    students: 80,
+    isPublished: true,
+  },
+  {
+    title: "Laravel",
+    students: 200,
+    isPublished: false,
+  },
+  {
+    title: "Node.js",
+    students: 120,
+    isPublished: true,
+  },
 ];
+
 const result = getPopularCourses(courses, 100);
+
 console.log(result);
+**/
+const pluckValues = (items, key) => {
+    return items.map((item) => item[key]);
+};
+// Sample input
+const users = [
+    { id: 1, name: "Rakib", role: "Admin" },
+    { id: 2, name: "Sadia", role: "Editor" },
+    { id: 3, name: "Tariq", role: "Subscriber" }
+];
+const names = pluckValues(users, "name");
+const ids = pluckValues(users, "id");
+const roles = pluckValues(users, "role");
+console.log(names);
+// ["Rakib", "Sadia", "Tariq"]
+console.log(ids);
+// [1, 2, 3]
+console.log(roles);
 export {};
+// ["Admin", "Editor", "Subscriber"]
