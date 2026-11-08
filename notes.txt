@@ -1,2 +1,4 @@
 tsc solutions.tsc
 node solutions.js
+
+validate null , undefined , never , any , unknown
