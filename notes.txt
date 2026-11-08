@@ -1,0 +1,2 @@
+tsc solutions.tsc
+node solutions.js
