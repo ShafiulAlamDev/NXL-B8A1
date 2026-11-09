@@ -73,7 +73,7 @@ class Employee {
     protected _name: string,
     protected _baseSalary: number,
   ) {
-    if (this._baseSalary <= 0) {
+    if (this._baseSalary < 0) {
       throw new Error("Salary cannot be negative value");
     }
   }
