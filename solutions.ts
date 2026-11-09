@@ -40,6 +40,16 @@ const formatCoordinate = (
   return `Location: ${locationName} (${latitude}, ${longitude})`;
 };
 
+const concatenateArrays = <T>(...arrays: T[][]): T[] => {
+  const result: T[] = [];
+  arrays.map((array) => {
+    array.map((item) => {
+      result.push(item);
+    });
+  });
+  return result;
+};
+
 interface Course {
   title: string;
   students: number;
