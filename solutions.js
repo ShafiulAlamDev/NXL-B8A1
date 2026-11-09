@@ -149,12 +149,15 @@ class Employee {
     constructor(_name, _baseSalary) {
         this._name = _name;
         this._baseSalary = _baseSalary;
+        if (this._baseSalary <= 0) {
+            throw new Error("Salary cannot be negative value");
+        }
     }
     get baseSalary() {
         return this._baseSalary;
     }
     set baseSalary(newSalary) {
-        if (newSalary < 0) {
+        if (newSalary <= 0) {
             throw new Error("Salary cannot be negative value");
         }
         this._baseSalary = newSalary;
@@ -174,7 +177,7 @@ class Manager extends Employee {
     }
 }
 // Sample Input:
-const manager = new Manager("Alice", 50000, "Engineering");
+const manager = new Manager("Alice", 0, "Engineering");
 console.log(manager.getDetails());
 console.log(manager.getRoleInfo());
 export {};
