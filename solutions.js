@@ -156,12 +156,6 @@ class Employee {
     get baseSalary() {
         return this._baseSalary;
     }
-    set baseSalary(newSalary) {
-        if (newSalary <= 0) {
-            throw new Error("Salary cannot be negative value");
-        }
-        this._baseSalary = newSalary;
-    }
     getDetails() {
         return `Employee: ${this._name}, Base Salary: ${this.baseSalary}`;
     }
@@ -177,10 +171,24 @@ class Manager extends Employee {
     }
 }
 // Sample Input:
-const manager = new Manager("Alice", 0, "Engineering");
-console.log(manager.getDetails());
-console.log(manager.getRoleInfo());
-export {};
+//const manager = new Manager("Alice", 0, "Engineering");
+//console.log(manager.getDetails());
+//console.log(manager.getRoleInfo());
 // Sample Output:
 //"Employee: Alice, Base Salary: 50000"
 //"Manager of Engineering: Alice"
+const validateAgeAsync = (age) => {
+    return new Promise((resolve, reject) => {
+        if (age < 18) {
+            reject(new Error("Access Denied: Must be 18 or older"));
+        }
+        else {
+            setTimeout(() => {
+                resolve("Access Granted");
+            }, 1000);
+        }
+    });
+};
+console.log(await validateAgeAsync(20));
+console.log(await validateAgeAsync(15));
+export {};
