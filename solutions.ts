@@ -1,91 +1,84 @@
-
 const multiplyValue = (value: number, multiplier?: number): number => {
+  if (typeof value !== "number" || !Number.isFinite(value)) {
+    throw new Error("Value must be a valid finite number");
+  }
 
-    if (typeof value !== "number" || !Number.isFinite(value)) {
-        throw new Error("Value must be a valid finite number");
+  if (multiplier === undefined) {
+    multiplier = 2;
+  } else if (typeof multiplier !== "number" || !Number.isFinite(multiplier)) {
+    throw new Error("Multiplier must be a valid finite number");
+  }
+
+  const result = value * multiplier;
+
+  if (!Number.isFinite(result)) {
+    throw new Error("Multiplication result is out of range");
+  }
+
+  return result;
+};
+
+const processInput = (value: string | number | boolean): string | number => {
+  if (typeof value === "string") {
+    return value.trim().toLowerCase();
+  }
+
+  if (typeof value === "number") {
+    if (!Number.isFinite(value)) {
+      throw new RangeError("Input must be a finite number");
     }
 
-    if (multiplier === undefined) {
-        multiplier = 2;
-    } else if (typeof multiplier !== "number" || !Number.isFinite(multiplier)) {
-        throw new Error("Multiplier must be a valid finite number");
-    }
-
-    const result = value * multiplier;
+    const result = value * 10;
 
     if (!Number.isFinite(result)) {
-        throw new Error("Multiplication result is out of range");
+      throw new RangeError("Result exceeds the supported numeric range");
     }
 
     return result;
+  }
+
+  if (typeof value === "boolean") {
+    return value ? "Active" : "Inactive";
+  }
+
+  throw new TypeError("Unsupported input type");
 };
 
-
-
-const processInput = (value: string | number | boolean): string | number => {
-
-    if (typeof value === "string") {
-        return value.trim().toLowerCase();
-    }
-
-    if (typeof value === "number") {
-
-        if (!Number.isFinite(value)) {
-            throw new RangeError("Input must be a finite number");
-        }
-
-        const result = value * 10;
-
-        if (!Number.isFinite(result)) {
-            throw new RangeError("Result exceeds the supported numeric range");
-        }
-
-        return result;
-    }
-
-    if (typeof value === "boolean") {
-        return value ? "Active" : "Inactive";
-    }
-
-    throw new TypeError("Unsupported input type");
-};
-
-
-
-type GeoTuple = readonly [latitude: number, longitude: number, locationName: string];
 const formatCoordinate = (
-    coordinate: GeoTuple
+  coordinate: readonly [
+    latitude: number,
+    longitude: number,
+    locationName: string,
+  ],
 ): string => {
+  if (!Array.isArray(coordinate) || coordinate.length !== 3) {
+    throw new Error("Input must contain exactly 3 elements");
+  }
 
-    if (!Array.isArray(coordinate) || coordinate.length !== 3) {
-        throw new Error("Input must contain exactly 3 elements");
-    }
+  const [latitude, longitude, locationName] = coordinate;
 
-    const [latitude, longitude, locationName] = coordinate;
+  if (typeof latitude !== "number" || !Number.isFinite(latitude)) {
+    throw new Error("Latitude must be a finite number");
+  }
 
-    if (typeof latitude !== "number" || !Number.isFinite(latitude)) {
-        throw new Error("Latitude must be a finite number");
-    }
+  if (typeof longitude !== "number" || !Number.isFinite(longitude)) {
+    throw new Error("Longitude must be a finite number");
+  }
 
-    if (typeof longitude !== "number" || !Number.isFinite(longitude)) {
-        throw new Error("Longitude must be a finite number");
-    }
+  if (typeof locationName !== "string" || locationName.trim() === "") {
+    throw new Error("Location name cannot be empty");
+  }
 
-    if (typeof locationName !== "string" || locationName.trim() === "") {
-        throw new Error("Location name cannot be empty");
-    }
+  if (latitude < -90 || latitude > 90) {
+    throw new Error("Latitude must be between -90 and 90");
+  }
 
-    if (latitude < -90 || latitude > 90) {
-        throw new Error("Latitude must be between -90 and 90");
-    }
+  if (longitude < -180 || longitude > 180) {
+    throw new Error("Longitude must be between -180 and 180");
+  }
 
-    if (longitude < -180 || longitude > 180) {
-        throw new Error("Longitude must be between -180 and 180");
-    }
-
-    return `Location: ${locationName} (${latitude}, ${longitude})`;
+  return `Location: ${locationName} (${latitude}, ${longitude})`;
 };
-
 
 interface Course {
   title: string;
@@ -95,9 +88,8 @@ interface Course {
 
 const getPopularCourses = (
   courses: readonly Course[],
-  minStudents: number
+  minStudents: number,
 ): Array<Course> => {
-
   // Validate null and undefined
   if (courses == null) {
     throw new Error("Courses cannot be null or undefined");
@@ -118,9 +110,7 @@ const getPopularCourses = (
     !Number.isFinite(minStudents) ||
     minStudents < 0
   ) {
-    throw new TypeError(
-      "minStudents must be a non-negative finite number"
-    );
+    throw new TypeError("minStudents must be a non-negative finite number");
   }
 
   // Validate individual courses
@@ -134,7 +124,7 @@ const getPopularCourses = (
     }
 
     if (typeof course.title !== "string") {
-      throw new TypeError("Course title must be a string");
+      throw new Error("Course title must be a string");
     }
 
     if (
@@ -143,22 +133,18 @@ const getPopularCourses = (
       course.students < 0
     ) {
       throw new TypeError(
-        "Course students must be a non-negative finite number"
+        "Course students must be a non-negative finite number",
       );
     }
 
     if (typeof course.isPublished !== "boolean") {
-      throw new TypeError(
-        "isPublished must be a boolean"
-      );
+      throw new TypeError("isPublished must be a boolean");
     }
   }
 
   // Filter published courses
   return courses.filter(
-    (course) =>
-      course.isPublished === true &&
-      course.students >= minStudents
+    (course) => course.isPublished === true && course.students >= minStudents,
   );
 };
 
@@ -191,10 +177,7 @@ const result = getPopularCourses(courses, 100);
 console.log(result);
 **/
 
-const pluckValues = <T, K extends keyof T>(
-  items: T[],
-  key: K
-): T[K][] => {
+const pluckValues = <T, K extends keyof T>(items: T[], key: K): T[K][] => {
   return items.map((item) => item[key]);
 };
 
@@ -216,3 +199,49 @@ console.log(names);
 // [1, 2, 3]
 //console.log(roles);
 // ["Admin", "Editor", "Subscriber"]
+
+class Employee {
+  constructor(
+    protected _name: string,
+    private _baseSalary: number,
+  ) {}
+
+  get baseSalary(): number {
+    return this._baseSalary;
+  }
+
+  set baseSalary(newSalary: number) {
+    if (newSalary < 0) {
+      throw new Error("Salary cannot be negative value");
+    }
+    this._baseSalary = newSalary;
+  }
+
+  getDetails(): string {
+    return `Employee: ${this._name}, Base Salary: ${this.baseSalary}`;
+  }
+}
+
+class Manager extends Employee {
+  constructor(
+    _name: string,
+    _baseSalary: number,
+    private _department: string,
+  ) {
+    super(_name, _baseSalary);
+  }
+
+  getRoleInfo(): string {
+    return `Manager of ${this._department}: ${this._name}`;
+  }
+}
+
+// Sample Input:
+const manager = new Manager("Alice", 50000, "Engineering");
+
+console.log(manager.getDetails());
+console.log(manager.getRoleInfo());
+
+// Sample Output:
+//"Employee: Alice, Base Salary: 50000"
+//"Manager of Engineering: Alice"

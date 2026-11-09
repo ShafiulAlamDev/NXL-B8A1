@@ -81,7 +81,7 @@ const getPopularCourses = (courses, minStudents) => {
             throw new TypeError("Invalid course object");
         }
         if (typeof course.title !== "string") {
-            throw new TypeError("Course title must be a string");
+            throw new Error("Course title must be a string");
         }
         if (typeof course.students !== "number" ||
             !Number.isFinite(course.students) ||
@@ -93,8 +93,7 @@ const getPopularCourses = (courses, minStudents) => {
         }
     }
     // Filter published courses
-    return courses.filter((course) => course.isPublished === true &&
-        course.students >= minStudents);
+    return courses.filter((course) => course.isPublished === true && course.students >= minStudents);
 };
 /**
 const courses: Course[] = [
@@ -128,18 +127,57 @@ const pluckValues = (items, key) => {
     return items.map((item) => item[key]);
 };
 // Sample input
+/**
 const users = [
-    { id: 1, name: "Rakib", role: "Admin" },
-    { id: 2, name: "Sadia", role: "Editor" },
-    { id: 3, name: "Tariq", role: "Subscriber" }
+  { id: 1, name: "Rakib", role: "Admin" },
+  { id: 2, name: "Sadia", role: "Editor" },
+  { id: 3, name: "Tariq", role: "Subscriber" }
 ];
 const names = pluckValues(users, "name");
 const ids = pluckValues(users, "id");
 const roles = pluckValues(users, "role");
 console.log(names);
+**/
 // ["Rakib", "Sadia", "Tariq"]
-console.log(ids);
+//console.log(ids);
 // [1, 2, 3]
-console.log(roles);
-export {};
+//console.log(roles);
 // ["Admin", "Editor", "Subscriber"]
+class Employee {
+    _name;
+    _baseSalary;
+    constructor(_name, _baseSalary) {
+        this._name = _name;
+        this._baseSalary = _baseSalary;
+    }
+    get baseSalary() {
+        return this._baseSalary;
+    }
+    set baseSalary(newSalary) {
+        if (newSalary < 0) {
+            throw new Error("Salary cannot be negative value");
+        }
+        this._baseSalary = newSalary;
+    }
+    getDetails() {
+        return `Employee: ${this._name}, Base Salary: ${this.baseSalary}`;
+    }
+}
+class Manager extends Employee {
+    _department;
+    constructor(_name, _baseSalary, _department) {
+        super(_name, _baseSalary);
+        this._department = _department;
+    }
+    getRoleInfo() {
+        return `Manager of ${this._department}: ${this._name}`;
+    }
+}
+// Sample Input:
+const manager = new Manager("Alice", 50000, "Engineering");
+console.log(manager.getDetails());
+console.log(manager.getRoleInfo());
+export {};
+// Sample Output:
+//"Employee: Alice, Base Salary: 50000"
+//"Manager of Engineering: Alice"
